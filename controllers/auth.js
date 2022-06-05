@@ -66,7 +66,7 @@ const googleSignIn = async (req, res = response) => {
         await usuario.save();
         const token = await generarJWT(usuario.id );
 
-        res.status(401).json({ok: true, token  });
+        res.json({ok: true, token  });
     } catch (error) {
         console.log(error);
         res.status(401).json({ok: false, msg: 'El token no es correcto'});
@@ -77,7 +77,8 @@ const googleSignIn = async (req, res = response) => {
 const renewToken = async (req, res = response) => {
     const uid = req.uid;
     const token = await generarJWT( uid );
-    res.json({ok: true, uid})
+    const usuario = await Usuario.findById(uid);
+    res.json({ok: true, uid, token, usuario})
 }
 
 module.exports = {
